@@ -54,7 +54,7 @@ typedef struct
 }led_t;
 
 /* APIs */
-hal_err_t led_init      (void);
+hal_err_t led_init      (led_id_t id);
 hal_err_t led_set_state (led_id_t id, led_state_t state);
 hal_err_t led_get_state (led_id_t id, led_state_t* state);
  

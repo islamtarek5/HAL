@@ -42,10 +42,13 @@ hal_err_t led_control(led_id_t id, led_state_t state)
     return HAL_OK;
 }
 
-hal_err_t led_init(void)
+hal_err_t led_init(led_id_t id)
 {
-    led_id_t id ;
-    for( id = 0 ; id < LED_MAX ; id ++)
+    if (id >= LED_MAX)
+    {
+        return HAL_FAIL;
+    }
+    else
     {
         mcal_gpio_set_pin_direction(LEDS[id].led_port , LEDS[id].led_pin, PIN_OUTPUT);
         if (LEDS[id].led_state != LED_TOG)
