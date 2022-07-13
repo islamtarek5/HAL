@@ -10,6 +10,38 @@
 /* Global variables */
 extern led_t LEDS[LED_MAX];
 
+/* Static functions */
+hal_err_t led_control(led_id_t id, led_state_t state);
+
+hal_err_t led_control(led_id_t id, led_state_t state)
+{
+    switch (state)
+    {
+    case LED_ON:
+        if(LEDS[id].led_direction == LED_FORWARD)
+            mcal_gpio_set_pin_level(LEDS[id].led_port , LEDS[id].led_pin, PIN_HIGH);
+        else if(LEDS[id].led_direction == LED_REVERSE)
+            mcal_gpio_set_pin_level(LEDS[id].led_port , LEDS[id].led_pin, PIN_LOW);
+        else
+            return HAL_FAIL;
+        break;
+    case LED_OFF:
+        if(LEDS[id].led_direction == LED_FORWARD)
+            mcal_gpio_set_pin_level(LEDS[id].led_port , LEDS[id].led_pin, PIN_LOW);
+        else if(LEDS[id].led_direction == LED_REVERSE)
+            mcal_gpio_set_pin_level(LEDS[id].led_port , LEDS[id].led_pin, PIN_HIGH);
+        else
+            return HAL_FAIL;
+        break;
+    case LED_TOG:
+        mcal_gpio_toggle_pin(LEDS[id].led_port , LEDS[id].led_pin);
+        break;
+    default:
+        return HAL_FAIL;
+    }
+    return HAL_OK;
+}
+
 hal_err_t led_init(led_id_t id)
 {
     if (id >= LED_MAX)
@@ -19,31 +51,17 @@ hal_err_t led_init(led_id_t id)
     else
     {
         mcal_gpio_set_pin_direction(LEDS[id].led_port , LEDS[id].led_pin, PIN_OUTPUT);
-        switch (LEDS[id].led_state)
-        {
-        case LED_ON:
-            if(LEDS[id].led_direction == LED_FORWARD)
-                mcal_gpio_set_pin_level(LEDS[id].led_port , LEDS[id].led_pin, PIN_HIGH);
-            else if(LEDS[id].led_direction == LED_REVERSE)
-                mcal_gpio_set_pin_level(LEDS[id].led_port , LEDS[id].led_pin, PIN_LOW);
-            else
-                return HAL_FAIL;
-            break;
-        case LED_OFF:
-            if(LEDS[id].led_direction == LED_FORWARD)
-                mcal_gpio_set_pin_level(LEDS[id].led_port , LEDS[id].led_pin, PIN_LOW);
-            else if(LEDS[id].led_direction == LED_REVERSE)
-                mcal_gpio_set_pin_level(LEDS[id].led_port , LEDS[id].led_pin, PIN_HIGH);
-            else
-                return HAL_FAIL;
-            break;
-        default:
-            return HAL_FAIL;
-        }
+        if (LEDS[id].led_state != LED_TOG)
+            return led_control(id, LEDS[id].led_state);
+        else
+            return HAL_FAIL;    
     }
-    return HAL_OK;
-    
+
 }
 
-hal_err_t led_set_state (led_id_t id, led_state_t state);
+hal_err_t led_set_state (led_id_t id, led_state_t state)
+{
+
+}
+
 hal_err_t led_get_state (led_id_t id, led_state_t* state);
