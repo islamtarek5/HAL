@@ -18,10 +18,11 @@
  * @note   Don't remove LED_MAX because it will be usd to indicate Number of leds in the project
  * @note   The order which will be used to define leds will be same used in config file
  * @note   Order of leds must start from 0
+ * @example typedef enum { LED_RED, LED_BLUE, ........ , LED_MAX}led_id_t;
  */
 typedef enum
 {
-    LED_RED, /* can be used like this or LED_RED = 0 */
+    /* Enter IDs of Leds in your project here following the instructions above */
     LED_MAX  /* Don't remove it and don't define any leds after it */
 }led_id_t;
 
