@@ -6,10 +6,5 @@
 #ifndef HAL_HAL_H_
 #define HAL_HAL_H_
 
-typedef enum
-{
-    HAL_FAIL = -1,
-    HAL_OK
-}hal_err_t;
 
 #endif 
