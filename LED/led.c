@@ -59,9 +59,22 @@ hal_err_t led_init(led_id_t id)
 
 }
 
-hal_err_t led_set_state (led_id_t id, led_state_t state)
+hal_err_t led_set_state(led_id_t id, led_state_t state)
 {
-
+    if(id < LED_MAX)
+    {
+        if(led_control(id,state) == HAL_OK)
+        {
+            LEDS[id].led_state = state;
+            return HAL_OK;
+        }
+        else
+            return HAL_FAIL;
+    }
+    else
+    {
+        return HAL_FAIL;
+    }
 }
 
 hal_err_t led_get_state (led_id_t id, led_state_t* state);
