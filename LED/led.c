@@ -8,6 +8,9 @@
 #include "led.h"
 
 /* Global variables */
+/**
+ * @brief exists in proj_config.c file
+ */
 extern led_t LEDS[LED_MAX];
 
 /* Static functions */
