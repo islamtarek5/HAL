@@ -12,19 +12,6 @@
 #include "../hal.h"
 
 /* Definitions */
-/**
- * @brief  This part defines which leds are used in the project
- * @note   Don't define any led after LED_MAX but you can define any number of leds before LED_MAX
- * @note   Don't remove LED_MAX because it will be usd to indicate Number of leds in the project
- * @note   The order which will be used to define leds will be same used in config file
- * @note   Order of leds must start from 0
- * @example typedef enum { LED_RED, LED_BLUE, ........ , LED_MAX}led_id_t;
- */
-typedef enum
-{
-    /* Enter IDs of Leds in your project here following the instructions above */
-    LED_MAX  /* Don't remove it and don't define any leds after it */
-}led_id_t;
 
 /* LED Direction */
 typedef uint8_t led_direction_t;
