@@ -1,7 +1,7 @@
 /*********************************************************************************************************************************************/
 /*                                                          Author      : Islam Tarek                                                        */
 /*                                                          SW Module   : LED                                                                */
-/*                                                          Last Update : 13 / 7 /2022                                                       */
+/*                                                          Last Update : 10 / 8 /2022                                                       */
 /*********************************************************************************************************************************************/
 
 #ifndef LED_LED_H_
@@ -12,6 +12,10 @@
 #include "../hal.h"
 
 /* Definitions */
+
+/* LED Timing characteristics */
+#define LED_FIRST_DELAY_MS   5
+#define LED_PERIOD_MS        5
 
 /* LED Direction */
 typedef uint8_t led_direction_t;
@@ -41,8 +45,10 @@ typedef struct
 }led_t;
 
 /* APIs */
-hal_err_t led_init      (led_id_t id);
-hal_err_t led_set_state (led_id_t id, led_state_t state);
-hal_err_t led_get_state (led_id_t id, led_state_t* state);
+
+void led_init             (void);
+void led_set_state        (led_id_t id, led_state_t state);
+led_state_t led_get_state (led_id_t id);
+void led_update           (void);
  
 #endif 

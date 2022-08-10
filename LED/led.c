@@ -1,22 +1,30 @@
 /*********************************************************************************************************************************************/
 /*                                                          Author      : Islam Tarek                                                        */
 /*                                                          SW Module   : LED                                                                */
-/*                                                          Last Update : 13 / 7 /2022                                                       */
+/*                                                          Last Update : 10 / 8 /2022                                                       */
 /*********************************************************************************************************************************************/
 
 /* Includes */
 #include "led.h"
 
 /* Global variables */
+
 /**
  * @brief exists in proj_config.c file
  */
 extern led_t LEDS[LED_MAX];
+const uint8_t FIRST_LED = 0;
 
 /* Static functions */
-hal_err_t led_control(led_id_t id, led_state_t state);
 
-hal_err_t led_control(led_id_t id, led_state_t state)
+static void led_control(led_id_t id, led_state_t state);
+
+/**
+ * @brief This function is used to cotrol LED state depending on the LED direction
+ * @param id The ID of led which will be controlled
+ * @param state The state of the led (LED_ON, LED_OFF or LED_TOG)
+ */
+static void led_control(led_id_t id, led_state_t state)
 {
     switch (state)
     {
@@ -25,73 +33,57 @@ hal_err_t led_control(led_id_t id, led_state_t state)
             mcal_gpio_set_pin_level(LEDS[id].led_port , LEDS[id].led_pin, PIN_HIGH);
         else if(LEDS[id].led_direction == LED_REVERSE)
             mcal_gpio_set_pin_level(LEDS[id].led_port , LEDS[id].led_pin, PIN_LOW);
-        else
-            return HAL_FAIL;
         break;
     case LED_OFF:
         if(LEDS[id].led_direction == LED_FORWARD)
             mcal_gpio_set_pin_level(LEDS[id].led_port , LEDS[id].led_pin, PIN_LOW);
         else if(LEDS[id].led_direction == LED_REVERSE)
             mcal_gpio_set_pin_level(LEDS[id].led_port , LEDS[id].led_pin, PIN_HIGH);
-        else
-            return HAL_FAIL;
         break;
     case LED_TOG:
         mcal_gpio_toggle_pin(LEDS[id].led_port , LEDS[id].led_pin);
         break;
-    default:
-        return HAL_FAIL;
     }
-    return HAL_OK;
 }
-
-hal_err_t led_init(led_id_t id)
+/**
+ * @brief This API initialize directions of LEDS
+ */
+void led_init(void)
 {
-    if (id >= LED_MAX)
+    uint8_t led;
+    for(led = FIRST_LED ; led < LED_MAX; led ++)
     {
-        return HAL_FAIL;
+        mcal_gpio_set_pin_direction(LEDS[led].led_port , LEDS[led].led_pin, PIN_OUTPUT);
+        if (LEDS[led].led_state != LED_TOG)
+            led_control(LEDS[led].led_id, LEDS[led].led_state);
     }
-    else
-    {
-        mcal_gpio_set_pin_direction(LEDS[id].led_port , LEDS[id].led_pin, PIN_OUTPUT);
-        if (LEDS[id].led_state != LED_TOG)
-            return led_control(id, LEDS[id].led_state);
-        else
-            return HAL_FAIL;    
-    }
-
 }
-
-hal_err_t led_set_state(led_id_t id, led_state_t state)
+/**
+ * @brief This API set the state of chosen LED
+ * @param id The ID of led which its state will be set
+ * @param state The state of the led (LED_ON, LED_OFF or LED_TOG)
+ */
+void led_set_state(led_id_t id, led_state_t state)
 {
     if(id < LED_MAX)
-    {
-        if(led_control(id,state) == HAL_OK)
-        {
-            LEDS[id].led_state = state;
-            return HAL_OK;
-        }
-        else
-            return HAL_FAIL;
-    }
-    else
-    {
-        return HAL_FAIL;
-    }
+        LEDS[id].led_state = state;
 }
-
-hal_err_t led_get_state(led_id_t id, led_state_t* state)
+/**
+ * @brief This API get the stat of the chosen LED if it's on , off or toggle
+ * @param id The ID of the led which its state will be gotten
+ * @return the state of chosen LED (LED_ON, LED_OFF or LED_TOG)
+ */
+led_state_t led_get_state(led_id_t id)
 {
-    if(state != NULL)
-    {
-        if(id < LED_MAX)
-        {
-            *state = LEDS[id].led_state;
-            return HAL_OK;
-        }
-        else
-            return HAL_FAIL;
-    }
-    else
-        return HAL_FAIL;
+    return LEDS[id].led_state;
+}
+/**
+ * @brief This API is responsible for running LED
+ */
+void led_update(void)
+{
+    /* Timing characterstics will be added */
+    led_id_t led ; 
+    for(led = FIRST_LED ; led < LED_MAX; led++)
+        led_control(led, LEDS[led].led_state);
 }
