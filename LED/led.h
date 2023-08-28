@@ -2,7 +2,7 @@
  * @Author                : Islam Tarek<islam.tarek@valeo.com>               *
  * @CreatedDate           : 2023-08-28 15:06:31                              *
  * @LastEditors           : Islam Tarek<islam.tarek@valeo.com>               *
- * @LastEditDate          : 2023-08-28 15:34:11                              *
+ * @LastEditDate          : 2023-08-28 16:14:04                              *
  * @FilePath              : led.h                                            *
  ****************************************************************************/
 
@@ -14,6 +14,7 @@
  */
 
 #include "../MCAL/MCAL.h"
+#include "led_cfg.h"
 
 
 /**
@@ -53,12 +54,6 @@ typedef enum
     LED_REVERSE              ,
     LED_MAX_BIAS     
 }led_bias_t;
-
-/**
- * @brief LED ID
- */
-
-typedef uint8_t led_id_t;
 
 /**
  * @brief LED structure
