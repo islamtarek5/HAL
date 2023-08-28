@@ -2,7 +2,7 @@
  * @Author                : Islam Tarek<islam.tarek@valeo.com>               *
  * @CreatedDate           : 2023-08-28 15:06:02                              *
  * @LastEditors           : Islam Tarek<islam.tarek@valeo.com>               *
- * @LastEditDate          : 2023-08-28 15:41:38                              *
+ * @LastEditDate          : 2023-08-28 16:13:31                              *
  * @FilePath              : led_cfg.h                                        *
  ****************************************************************************/
 
@@ -10,14 +10,18 @@
 #define LED_LED_CFG_H_
 
 /**
- * @section Definitions
+ * @section typedefs
  */
 
 /**
- * @brief Number of LEDs
- * @note This macro contains the number of LEDs that will be used in the project.
+ * @brief LED ID
+ * @note This Enum will contain the LEDs' IDs in project.
+ * !note LED_Max_ID must not deleted as it's used in code.
  */
+typedef enum
+{
+    // TODO: Add LEDs' IDs
+    LED_MAX_ID
+}led_id_t;
 
-#define NUMBER_OF_LEDS      
-    
 #endif
