@@ -2,7 +2,7 @@
  * @Author                : Islam Tarek<islam.tarek@valeo.com>               *
  * @CreatedDate           : 2023-08-28 15:06:31                              *
  * @LastEditors           : Islam Tarek<islam.tarek@valeo.com>               *
- * @LastEditDate          : 2023-08-28 16:14:04                              *
+ * @LastEditDate          : 2023-08-28 16:32:11                              *
  * @FilePath              : led.h                                            *
  ****************************************************************************/
 
@@ -77,4 +77,5 @@ void LED_init               (void);
 void LED_set_state          (led_id_t, led_state_t);
 led_state_t LED_get_state   (led_id_t);
 void LED_update             (void);
+
 #endif
