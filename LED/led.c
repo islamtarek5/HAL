@@ -2,7 +2,7 @@
  * @Author                : Islam Tarek<islam.tarek@valeo.com>               *
  * @CreatedDate           : 2023-08-28 15:06:37                              *
  * @LastEditors           : Islam Tarek<islam.tarek@valeo.com>               *
- * @LastEditDate          : 2023-08-29 11:38:23                              *
+ * @LastEditDate          : 2023-08-29 11:54:06                              *
  * @FilePath              : led.c                                            *
  ****************************************************************************/
 
@@ -120,4 +120,24 @@ led_state_t LED_get_state(led_id_t id)
     return state;
 }
 
-void LED_update(void);
+/**
+ * @brief This API is used to update the LED state and drive MCU output to achieve the LED state.
+ */
+void LED_update(void)
+{
+    uint8_t led = FIRST_LED;
+    /* Loop for LEDs to update their states */
+    for(led = FIRST_LED; led < LED_MAX_ID; led ++)
+    {
+        /* Check if the LED state exists or not */
+        if(LEDs_CFG[led].state < LED_MAX_STATE)
+        {
+            /* Control LED state */
+            LED_control_state(led);
+        }
+        else
+        {
+            /* Do Nothing */
+        }
+    }
+}
