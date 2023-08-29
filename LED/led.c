@@ -2,7 +2,7 @@
  * @Author                : Islam Tarek<islam.tarek@valeo.com>               *
  * @CreatedDate           : 2023-08-28 15:06:37                              *
  * @LastEditors           : Islam Tarek<islam.tarek@valeo.com>               *
- * @LastEditDate          : 2023-08-29 11:17:32                              *
+ * @LastEditDate          : 2023-08-29 11:23:56                              *
  * @FilePath              : led.c                                            *
  ****************************************************************************/
 
@@ -57,7 +57,29 @@ static void LED_control_state(led_id_t id)
     }
 }
 
-void LED_init(void);
+/**
+ * @brief This API is used to Initialze MCU Pins that are connected to LEDs as output and to initialize LEDs State.
+ */
+void LED_init(void)
+{
+    /* Loop for LEDs to initialze them */
+    uint8_t led = FIRST_LED;
+    for(led = FIRST_LED, led < LED_MAX_ID, led ++)
+    {
+        /* Initialize LEDs Pins as output */
+        (void)MCAL_GPIO_set_pin_mode(LEDs_CFG[led].port, LEDs_CFG[led].pin, MCAL_PIN_OUTPUT);
+        /* Check if the state exists or not and that initial state isn't toggle */
+        if((LEDs_CFG[led].state < LED_MAX_STATE) && (LEDs_CFG[led].state != LED_TOG))
+        {
+            LED_control_state(led);   
+        }
+        else
+        {
+            /* Do Nothing */
+        }
+    }
+}
+
 void LED_set_state(led_id_t, led_state_t);
 led_state_t LED_get_state(led_id_t);
 void LED_update(void);
