@@ -2,7 +2,7 @@
  * @Author                : Islam Tarek<islam.tarek@valeo.com>               *
  * @CreatedDate           : 2023-08-28 15:06:31                              *
  * @LastEditors           : Islam Tarek<islam.tarek@valeo.com>               *
- * @LastEditDate          : 2023-08-28 16:32:11                              *
+ * @LastEditDate          : 2023-08-29 10:39:02                              *
  * @FilePath              : led.h                                            *
  ****************************************************************************/
 
@@ -34,6 +34,7 @@ typedef mcal_pin_t led_pin_t;
 
 /**
  * @brief LED state
+ * !note : Theses Values must not be changed.
  */
 
 typedef enum
@@ -46,6 +47,7 @@ typedef enum
 
 /**
  * @brief LED Bias
+ * !note : Theses Values must not be changed.
  */
 
 typedef enum
