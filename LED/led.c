@@ -2,7 +2,7 @@
  * @Author                : Islam Tarek<islam.tarek@valeo.com>               *
  * @CreatedDate           : 2023-08-28 15:06:37                              *
  * @LastEditors           : Islam Tarek<islam.tarek@valeo.com>               *
- * @LastEditDate          : 2023-08-29 11:31:58                              *
+ * @LastEditDate          : 2023-08-29 11:38:23                              *
  * @FilePath              : led.c                                            *
  ****************************************************************************/
 
@@ -99,5 +99,25 @@ void LED_set_state(led_id_t id, led_state_t state)
     }
 }
 
-led_state_t LED_get_state(led_id_t);
+/**
+ * @brief This API is used to get the state of the LED.
+ * @param id The ID of LED whose state will be got.
+ * @return The state of the LED (LED_OFF, LED_ON or LED_TOG).
+ */
+led_state_t LED_get_state(led_id_t id)
+{
+    led_state_t state = LED_MAX_STATE;
+    /* Check if the LED exists or not */
+    if(id < LED_MAX_ID)
+    {
+        /* Get the LED state */
+        state = LEDs_CFG[id].state;
+    }
+    else
+    {
+        /* Do Nothing */
+    }
+    return state;
+}
+
 void LED_update(void);
