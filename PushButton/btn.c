@@ -2,7 +2,7 @@
  * @Author                : Islam Tarek<islam.tarek@valeo.com>               *
  * @CreatedDate           : 2023-08-30 14:32:12                              *
  * @LastEditors           : Islam Tarek<islam.tarek@valeo.com>               *
- * @LastEditDate          : 2023-08-30 17:32:58                              *
+ * @LastEditDate          : 2023-08-30 17:56:19                              *
  * @FilePath              : btn.c                                            *
  ****************************************************************************/
 
@@ -82,10 +82,19 @@ void BTN_init(void)
             /* Do Nothing */
         }
     }
-    
 }
 
-void BTN_set_state(btn_id_t, btn_state_t);
+/**
+ * @brief This API is used to set btn state. It Can be used for Dubgging.
+ * @param id The ID of the button whose state will be set.
+ * @param state The state which will be set to button (BTN_RELEASED, BTN_PREPRESSED, BTN_SHORT_PRESSED, BTN_LONG_PRESSED or BTN_PRERELEASED).
+ */
+void BTN_set_state(btn_id_t id, btn_state_t state)
+{
+    /* Set the Button state */
+    BTNs_CFG[id].state = state;
+}
+
 btn_state_t BTN_get_state(btn_id_t);
 void BTN_update(void);
 
