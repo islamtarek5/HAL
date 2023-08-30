@@ -2,7 +2,7 @@
  * @Author                : Islam Tarek<islam.tarek@valeo.com>               *
  * @CreatedDate           : 2023-08-30 14:32:12                              *
  * @LastEditors           : Islam Tarek<islam.tarek@valeo.com>               *
- * @LastEditDate          : 2023-08-30 18:07:10                              *
+ * @LastEditDate          : 2023-08-30 18:08:13                              *
  * @FilePath              : btn.c                                            *
  ****************************************************************************/
 
@@ -103,6 +103,28 @@ void BTN_set_state(btn_id_t id, btn_state_t state)
     }
 }
 
-btn_state_t BTN_get_state(btn_id_t);
+/**
+ * @brief This API is used to get the state of the button.
+ * @param id The ID of the button whose state will be got.
+ * @return The state of the button (BTN_RELEASED, BTN_PREPRESSED, BTN_SHORT_PRESSED, BTN_LONG_PRESSED or BTN_PRERELEASED).
+ */
+btn_state_t BTN_get_state(btn_id_t id)
+{
+    btn_state_t state = BTN_MAX_STATE;
+    /* Check if the button ID exists or not */
+    if(id < BTN_MAX_ID)
+    {
+        /* Get the state of the given button */
+        state = BTNs_CFG[id].state;
+    }
+    else
+    {
+        /* Do Nothing */
+    }
+
+    /* Return the state of the button */
+    return state;
+}
+
 void BTN_update(void);
 
