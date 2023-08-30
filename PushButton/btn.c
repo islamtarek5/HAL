@@ -2,7 +2,7 @@
  * @Author                : Islam Tarek<islam.tarek@valeo.com>               *
  * @CreatedDate           : 2023-08-30 14:32:12                              *
  * @LastEditors           : Islam Tarek<islam.tarek@valeo.com>               *
- * @LastEditDate          : 2023-08-30 17:56:19                              *
+ * @LastEditDate          : 2023-08-30 18:07:10                              *
  * @FilePath              : btn.c                                            *
  ****************************************************************************/
 
@@ -65,17 +65,17 @@ void BTN_init(void)
         if((BTNs_CFG[btn].connection == BTN_EXT_PULL_UP) || (BTNs_CFG[btn].connection == BTN_EXT_PULL_DOWN))
         {
             /* Set Pin as floating Input */
-            MCAL_GPIO_set_pin_mode(BTNs_CFG[btn].port, BTNs_CFG[btn].pin, MCAL_PIN_INPUT_FLOATING);
+            (void)MCAL_GPIO_set_pin_mode(BTNs_CFG[btn].port, BTNs_CFG[btn].pin, MCAL_PIN_INPUT_FLOATING);
         }
         else if(BTNs_CFG[btn].connection == BTN_INT_PULL_UP)
         {
             /* Set Pin as Pull-up Input */
-            MCAL_GPIO_set_pin_mode(BTNs_CFG[btn].port, BTNs_CFG[btn].pin, MCAL_PIN_INPUT_PULL_UP);
+            (void)MCAL_GPIO_set_pin_mode(BTNs_CFG[btn].port, BTNs_CFG[btn].pin, MCAL_PIN_INPUT_PULL_UP);
         }
         else if(BTNs_CFG[btn].connection == BTN_INT_PULL_DOWN)
         {
             /* Set Pin as Pull-up Input */
-            MCAL_GPIO_set_pin_mode(BTNs_CFG[btn].port, BTNs_CFG[btn].pin, MCAL_PIN_INPUT_PULL_DOWN);
+            (void)MCAL_GPIO_set_pin_mode(BTNs_CFG[btn].port, BTNs_CFG[btn].pin, MCAL_PIN_INPUT_PULL_DOWN);
         }
         else
         {
@@ -85,14 +85,22 @@ void BTN_init(void)
 }
 
 /**
- * @brief This API is used to set btn state. It Can be used for Dubgging.
+ * @brief This API is used to set button state. It Can be used for Dubgging.
  * @param id The ID of the button whose state will be set.
  * @param state The state which will be set to button (BTN_RELEASED, BTN_PREPRESSED, BTN_SHORT_PRESSED, BTN_LONG_PRESSED or BTN_PRERELEASED).
  */
 void BTN_set_state(btn_id_t id, btn_state_t state)
 {
-    /* Set the Button state */
-    BTNs_CFG[id].state = state;
+    /* Check if the button ID and button state exist or not */
+    if((id < BTN_MAX_ID)  && (state < BTN_MAX_STATE))
+    {
+        /* Set the Button state */
+        BTNs_CFG[id].state = state;
+    }
+    else
+    {
+        /* Do Nothing */
+    }
 }
 
 btn_state_t BTN_get_state(btn_id_t);
