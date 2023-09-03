@@ -2,12 +2,25 @@
  * @Author                : Islam Tarek<islam.tarek@valeo.com>               *
  * @CreatedDate           : 2023-08-30 14:32:04                              *
  * @LastEditors           : Islam Tarek<islam.tarek@valeo.com>               *
- * @LastEditDate          : 2023-08-30 16:08:19                              *
+ * @LastEditDate          : 2023-09-03 12:11:48                              *
  * @FilePath              : btn_cfg.h                                        *
  ****************************************************************************/
 
 #ifndef BTN_BTN_CFG_H_
 #define BTN_BTN_CFG_H_
+
+/**
+ * @section Definitions 
+*/
+
+/**
+ * @brief Long Press cycles.
+ * @note Number of cycles = long press time (in ms) / button main cycle (in ms).
+ * @example if long press time is 2s (2000 ms) and button main cycle is 20 ms then long press cycles = 100.
+*/
+
+#define LONG_PRESS_CYCLES     100U  
+
 
 /**
  * @section typedefs
