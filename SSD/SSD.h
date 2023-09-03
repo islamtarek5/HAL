@@ -2,7 +2,7 @@
  * @Author                : Islam Tarek<islam.tarek@valeo.com>               *
  * @CreatedDate           : 2023-09-03 13:30:19                              *
  * @LastEditors           : Islam Tarek<islam.tarek@valeo.com>               *
- * @LastEditDate          : 2023-09-03 15:20:26                              *
+ * @LastEditDate          : 2023-09-03 15:57:11                              *
  * @FilePath              : SSD.h                                            *
  ****************************************************************************/
 
@@ -101,6 +101,7 @@ typedef struct
 void SSD_init               (void);
 void SSD_set_symbol         (ssd_id_t, ssd_symbol_t);
 void SSD_set_number         (ssd_id_t, uint16_t);
+void SSD_clear              (ssd_id_t);
 void SSD_set_state          (ssd_id_t, ssd_state_t);
 ssd_state_t SSD_get_state   (ssd_id_t);
 void SSD_update             (void);
