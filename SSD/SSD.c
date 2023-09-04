@@ -2,7 +2,7 @@
  * @Author                : Islam Tarek<islam.tarek@valeo.com>               *
  * @CreatedDate           : 2023-09-03 13:29:38                              *
  * @LastEditors           : Islam Tarek<islam.tarek@valeo.com>               *
- * @LastEditDate          : 2023-09-04 12:40:46                              *
+ * @LastEditDate          : 2023-09-04 13:32:07                              *
  * @FilePath              : SSD.c                                            *
  ****************************************************************************/
 
@@ -21,6 +21,7 @@
  * @brief SSD Definitions
 */
 #define FIRST_SSD       0U
+#define LAST_SSD        (((uint8_t)SSD_MAX_ID) - 1U)
 #define SSD_MAX_DIGIT   9U
 
 /**
@@ -273,4 +274,35 @@ ssd_state_t SSD_get_state(ssd_id_t id)
     return state;    
 }
 
-void SSD_update             (void);
+/**
+ * @brief This API is used to update SSD states and drive segments to display thier content.
+ */
+void SSD_update(void)
+{
+    static uint8_t current_ssd = FIRST_SSD;
+    uint8_t ssd = FIRST_SSD;
+    
+    /* Turn All SSDs off */
+    for(ssd = FIRST_SSD; ssd < SSD_MAX_ID; ssd ++)
+    {
+        MCAL_GPIO_set_pin_level((SSDs_CFG[ssd].port), (SSDs_CFG[ssd].pin), ((SSDs_CFG[ssd].type) ^ SSD_OFF));
+    }
+    
+    /* Turn current SSD ON */
+    MCAL_GPIO_set_pin_level((SSDs_CFG[current_ssd].port), (SSDs_CFG[current_ssd].pin), ((SSDs_CFG[current_ssd].type) ^ SSD_ON));
+
+    /* Control SSD segments */
+    SSD_control_segments(current_ssd);
+
+    /* Update current SSD  */
+    if(LAST_SSD == current_ssd)
+    {
+        /* Set current SSD to first SSD */
+        current_ssd = FIRST_SSD;
+    }
+    else
+    {
+        /* Set current SSD to next SSD */
+        current_ssd ++;
+    }
+}
