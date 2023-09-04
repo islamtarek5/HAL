@@ -2,7 +2,7 @@
  * @Author                : Islam Tarek<islam.tarek@valeo.com>               *
  * @CreatedDate           : 2023-09-03 13:29:38                              *
  * @LastEditors           : Islam Tarek<islam.tarek@valeo.com>               *
- * @LastEditDate          : 2023-09-04 11:22:08                              *
+ * @LastEditDate          : 2023-09-04 11:29:56                              *
  * @FilePath              : SSD.c                                            *
  ****************************************************************************/
 
@@ -158,7 +158,25 @@ void SSD_init(void)
     }
 }
 
-void SSD_set_symbol         (ssd_id_t, ssd_symbol_t);
+/**
+ * @brief This API is used to set symbol to be displayed on SSD.
+ * @param id The ID of SSD on which symbol will be displayed.
+ * @param symbol The symbol that will displayed on SSD.
+ */
+void SSD_set_symbol(ssd_id_t id, ssd_symbol_t symbol)
+{
+    /* Check if the symbol belongs to symbols array or not */
+    if(symbol < SSD_MAX_SYMBOL)
+    {
+        /* Control segments to display the given symbol */
+        SSD_control_segments(id, SSD_Symbols[symbol]);
+    }
+    else
+    {
+        /* Do Nothing */
+    }
+}
+
 void SSD_set_number         (ssd_id_t, uint16_t);
 void SSD_clear              (ssd_id_t);
 void SSD_set_state          (ssd_id_t, ssd_state_t);
