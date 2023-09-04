@@ -2,7 +2,7 @@
  * @Author                : Islam Tarek<islam.tarek@valeo.com>               *
  * @CreatedDate           : 2023-09-03 13:29:38                              *
  * @LastEditors           : Islam Tarek<islam.tarek@valeo.com>               *
- * @LastEditDate          : 2023-09-04 12:22:58                              *
+ * @LastEditDate          : 2023-09-04 12:32:30                              *
  * @FilePath              : SSD.c                                            *
  ****************************************************************************/
 
@@ -131,14 +131,18 @@ static void SSD_control_segments(ssd_id_t);
 static void SSD_control_segments(ssd_id_t id)
 {
     /* Control Segments' levels depending on the symbol */
-    MCAL_GPIO_set_pin_level(SSD_SEGMENT_A_PORT, SSD_SEGMENT_A_PIN, (((SSD_Value[id] >> SEG_A_SHIFT) & SEG_Mask) ^ SSDs_CFG[id].type));
-    MCAL_GPIO_set_pin_level(SSD_SEGMENT_B_PORT, SSD_SEGMENT_B_PIN, (((SSD_Value[id] >> SEG_B_SHIFT) & SEG_Mask) ^ SSDs_CFG[id].type));
-    MCAL_GPIO_set_pin_level(SSD_SEGMENT_C_PORT, SSD_SEGMENT_C_PIN, (((SSD_Value[id] >> SEG_C_SHIFT) & SEG_Mask) ^ SSDs_CFG[id].type));
-    MCAL_GPIO_set_pin_level(SSD_SEGMENT_D_PORT, SSD_SEGMENT_D_PIN, (((SSD_Value[id] >> SEG_D_SHIFT) & SEG_Mask) ^ SSDs_CFG[id].type));
-    MCAL_GPIO_set_pin_level(SSD_SEGMENT_E_PORT, SSD_SEGMENT_E_PIN, (((SSD_Value[id] >> SEG_E_SHIFT) & SEG_Mask) ^ SSDs_CFG[id].type));
-    MCAL_GPIO_set_pin_level(SSD_SEGMENT_F_PORT, SSD_SEGMENT_F_PIN, (((SSD_Value[id] >> SEG_F_SHIFT) & SEG_Mask) ^ SSDs_CFG[id].type));
-    MCAL_GPIO_set_pin_level(SSD_SEGMENT_G_PORT, SSD_SEGMENT_G_PIN, (((SSD_Value[id] >> SEG_G_SHIFT) & SEG_Mask) ^ SSDs_CFG[id].type));
+    MCAL_GPIO_set_pin_level(SSD_SEGMENT_A_PORT, SSD_SEGMENT_A_PIN, (((SSD_Value[id] >> SEG_A_SHIFT) & SEG_Mask) ^ (SSDs_CFG[id].type)));
+    MCAL_GPIO_set_pin_level(SSD_SEGMENT_B_PORT, SSD_SEGMENT_B_PIN, (((SSD_Value[id] >> SEG_B_SHIFT) & SEG_Mask) ^ (SSDs_CFG[id].type)));
+    MCAL_GPIO_set_pin_level(SSD_SEGMENT_C_PORT, SSD_SEGMENT_C_PIN, (((SSD_Value[id] >> SEG_C_SHIFT) & SEG_Mask) ^ (SSDs_CFG[id].type)));
+    MCAL_GPIO_set_pin_level(SSD_SEGMENT_D_PORT, SSD_SEGMENT_D_PIN, (((SSD_Value[id] >> SEG_D_SHIFT) & SEG_Mask) ^ (SSDs_CFG[id].type)));
+    MCAL_GPIO_set_pin_level(SSD_SEGMENT_E_PORT, SSD_SEGMENT_E_PIN, (((SSD_Value[id] >> SEG_E_SHIFT) & SEG_Mask) ^ (SSDs_CFG[id].type)));
+    MCAL_GPIO_set_pin_level(SSD_SEGMENT_F_PORT, SSD_SEGMENT_F_PIN, (((SSD_Value[id] >> SEG_F_SHIFT) & SEG_Mask) ^ (SSDs_CFG[id].type)));
+    MCAL_GPIO_set_pin_level(SSD_SEGMENT_G_PORT, SSD_SEGMENT_G_PIN, (((SSD_Value[id] >> SEG_G_SHIFT) & SEG_Mask) ^ (SSDs_CFG[id].type)));
 }
+
+/**
+ * @section Implementation of APIs
+*/
 
 /**
  * @brief This API is used to Initialize SSD Pins and SSD Segments' Pins as output.
@@ -160,11 +164,11 @@ void SSD_init(void)
     for(ssd = FIRST_SSD; ssd < SSD_MAX_ID; ssd++)
     {
         /* Set SSD Pins as output */
-        MCAL_GPIO_set_pin_mode(SSDs_CFG[ssd].port, SSDs_CFG[ssd].pin, MCAL_PIN_OUTPUT);
+        MCAL_GPIO_set_pin_mode((SSDs_CFG[ssd].port), (SSDs_CFG[ssd].pin), MCAL_PIN_OUTPUT);
         /* Control Segments By initial Value */
         SSD_control_segments(ssd);
         /* Set SSD level */
-        MCAL_GPIO_set_pin_level(SSDs_CFG[ssd].port, SSDs_CFG[ssd].pin, (SSDs_CFG[ssd].type ^ SSDs_CFG[ssd].state));
+        MCAL_GPIO_set_pin_level((SSDs_CFG[ssd].port), (SSDs_CFG[ssd].pin), ((SSDs_CFG[ssd].type) ^ (SSDs_CFG[ssd].state)));
     }
 }
 
@@ -228,6 +232,24 @@ void SSD_clear(ssd_id_t id)
     }
 }
 
-void SSD_set_state          (ssd_id_t, ssd_state_t);
+/**
+ * @brief This API is used to set the state of SSD.
+ * @param id The ID of the SSD whose state will be set.
+ * @param state The to which the SSD will be set (SSD_OFF or SSD_ON).
+ */
+void SSD_set_state(ssd_id_t id, ssd_state_t state)
+{
+    /* Check if the SSD and state exist or not */
+    if((id < SSD_MAX_ID) && (state < SSD_MAX_STATE))
+    {
+        /* Set the state of the given SSD */
+        SSDs_CFG[id].state = state;
+    }
+    else
+    {
+        /* Do Nothing */
+    }
+}
+
 ssd_state_t SSD_get_state   (ssd_id_t);
 void SSD_update             (void);
