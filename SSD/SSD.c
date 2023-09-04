@@ -2,7 +2,7 @@
  * @Author                : Islam Tarek<islam.tarek@valeo.com>               *
  * @CreatedDate           : 2023-09-03 13:29:38                              *
  * @LastEditors           : Islam Tarek<islam.tarek@valeo.com>               *
- * @LastEditDate          : 2023-09-04 12:16:27                              *
+ * @LastEditDate          : 2023-09-04 12:22:58                              *
  * @FilePath              : SSD.c                                            *
  ****************************************************************************/
 
@@ -210,7 +210,24 @@ void SSD_set_number(ssd_id_t ones_id, uint16_t number)
     }      
 }
 
-void SSD_clear              (ssd_id_t);
+/**
+ * @brief This API is used to clear SSD. 
+ * @param id The ID of the SSD which will be cleared.
+ */
+void SSD_clear(ssd_id_t id)
+{
+    /* Check if the SSD exists or not */
+    if(id < SSD_MAX_ID)
+    {
+        /* Set the clear value to the given SSD */
+        SSD_Value[id] = SSD_CLEAR_VALUE;
+    }
+    else
+    {
+        /* Do Nothing */
+    }
+}
+
 void SSD_set_state          (ssd_id_t, ssd_state_t);
 ssd_state_t SSD_get_state   (ssd_id_t);
 void SSD_update             (void);
