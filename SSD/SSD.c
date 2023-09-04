@@ -2,7 +2,7 @@
  * @Author                : Islam Tarek<islam.tarek@valeo.com>               *
  * @CreatedDate           : 2023-09-03 13:29:38                              *
  * @LastEditors           : Islam Tarek<islam.tarek@valeo.com>               *
- * @LastEditDate          : 2023-09-04 12:32:30                              *
+ * @LastEditDate          : 2023-09-04 12:40:46                              *
  * @FilePath              : SSD.c                                            *
  ****************************************************************************/
 
@@ -251,5 +251,26 @@ void SSD_set_state(ssd_id_t id, ssd_state_t state)
     }
 }
 
-ssd_state_t SSD_get_state   (ssd_id_t);
+/**
+ * @brief This API is used to get the state of SSD.
+ * @param id The ID whose state will be got.
+ * @return The state of SSD (SSD_OFF or SSD_ON).
+ */
+ssd_state_t SSD_get_state(ssd_id_t id)
+{
+    ssd_state_t state = SSD_MAX_STATE;
+
+    if(id < SSD_MAX_ID)
+    {
+        /* Get the state of the given SSD */
+        state = (SSDs_CFG[id].state);
+    }
+    else
+    {
+        /* Do Nothing */
+    }
+
+    return state;    
+}
+
 void SSD_update             (void);
