@@ -1,89 +1,143 @@
-/*********************************************************************************************************************************************/
-/*                                                          Author      : Islam Tarek                                                        */
-/*                                                          SW Module   : LED                                                                */
-/*                                                          Last Update : 10 / 8 /2022                                                       */
-/*********************************************************************************************************************************************/
+/*****************************************************************************
+ * @Author                : Islam Tarek<islam.tarek@valeo.com>               *
+ * @CreatedDate           : 2023-08-28 15:06:37                              *
+ * @LastEditors           : Islam Tarek<islam.tarek@valeo.com>               *
+ * @LastEditDate          : 2023-08-29 11:54:06                              *
+ * @FilePath              : led.c                                            *
+ ****************************************************************************/
 
-/* Includes */
+/**
+ * @section Includes
+ */
+
 #include "led.h"
 
-/* Global variables */
 
 /**
- * @brief exists in proj_config.c file
+ * @section Definitions
  */
-extern led_t LEDS[LED_MAX];
-const uint8_t FIRST_LED = 0;
 
-/* Static functions */
-
-static void led_control(led_id_t id, led_state_t state);
+#define FIRST_LED   0U
 
 /**
- * @brief This function is used to cotrol LED state depending on the LED direction
- * @param id The ID of led which will be controlled
- * @param state The state of the led (LED_ON, LED_OFF or LED_TOG)
+ * @section External Global Variables
  */
-static void led_control(led_id_t id, led_state_t state)
+
+extern Led_S LEDs_CFG[LED_MAX_ID];
+
+
+/**
+ * @section Static function prototype.
+ */
+
+static void LED_control_state(led_id_t);
+
+
+/**
+ * @section Static function Implementation
+ */
+
+/**
+ * @brief This API is used to control LED state and drive MCU Pin with suitable output to achieve required state.
+ * @param id The ID of th led whose state will be controlled.
+ */
+static void LED_control_state(led_id_t id)
 {
-    switch (state)
+    /* Check if the LED state is toggle or not */
+    if(LEDs_CFG[id].state == LED_TOG)
     {
-    case LED_ON:
-        if(LEDS[id].led_direction == LED_FORWARD)
-            mcal_gpio_set_pin_level(LEDS[id].led_port , LEDS[id].led_pin, PIN_HIGH);
-        else if(LEDS[id].led_direction == LED_REVERSE)
-            mcal_gpio_set_pin_level(LEDS[id].led_port , LEDS[id].led_pin, PIN_LOW);
-        break;
-    case LED_OFF:
-        if(LEDS[id].led_direction == LED_FORWARD)
-            mcal_gpio_set_pin_level(LEDS[id].led_port , LEDS[id].led_pin, PIN_LOW);
-        else if(LEDS[id].led_direction == LED_REVERSE)
-            mcal_gpio_set_pin_level(LEDS[id].led_port , LEDS[id].led_pin, PIN_HIGH);
-        break;
-    case LED_TOG:
-        mcal_gpio_toggle_pin(LEDS[id].led_port , LEDS[id].led_pin);
-        break;
+        /* Toggle LED state */
+        (void)MCAL_GPIO_toggle_pin_level(LEDs_CFG[id].port, LEDs_CFG[id].pin);
+    }
+    else
+    {
+        /* Control the state of the given LED */
+        /* XOR between Bias and state is used to get suitable GPIO output */
+        (void)MCAL_GPIO_set_pin_level(LEDs_CFG[id].port, LEDs_CFG[id].pin, (LEDs_CFG[id].bias ^ LEDs_CFG[id].state));
     }
 }
+
 /**
- * @brief This API initialize directions of LEDS
+ * @brief This API is used to Initialize MCU Pins that are connected to LEDs as output and to initialize LEDs State.
  */
-void led_init(void)
+void LED_init(void)
 {
-    uint8_t led;
-    for(led = FIRST_LED ; led < LED_MAX; led ++)
+    /* Loop for LEDs to initialize them */
+    uint8_t led = FIRST_LED;
+    for(led = FIRST_LED; led < LED_MAX_ID; led ++)
     {
-        mcal_gpio_set_pin_direction(LEDS[led].led_port , LEDS[led].led_pin, PIN_OUTPUT);
-        if (LEDS[led].led_state != LED_TOG)
-            led_control(LEDS[led].led_id, LEDS[led].led_state);
+        /* Initialize LEDs Pins as output */
+        (void)MCAL_GPIO_set_pin_mode(LEDs_CFG[led].port, LEDs_CFG[led].pin, MCAL_PIN_OUTPUT);
+        /* Check if the state exists or not and that initial state isn't toggle */
+        if((LEDs_CFG[led].state < LED_MAX_STATE) && (LEDs_CFG[led].state != LED_TOG))
+        {
+            LED_control_state(led);   
+        }
+        else
+        {
+            /* Do Nothing */
+        }
     }
 }
+
 /**
- * @brief This API set the state of chosen LED
- * @param id The ID of led which its state will be set
- * @param state The state of the led (LED_ON, LED_OFF or LED_TOG)
+ * @brief This API is used to set LED state.
+ * @param id The ID of LED whose state will be set.
+ * @param state The state to which LED will be set (LED_OFF, LED_ON, LED_TOG).
  */
-void led_set_state(led_id_t id, led_state_t state)
+void LED_set_state(led_id_t id, led_state_t state)
 {
-    if(id < LED_MAX)
-        LEDS[id].led_state = state;
+    /* Check if the LED ID and LED state exist or not */
+    if((id < LED_MAX_ID) && (state < LED_MAX_STATE))
+    {
+        /* update the state of the LED */
+        LEDs_CFG[id].state = state;
+    }
+    else
+    {
+        /* Do Nothing */
+    }
 }
+
 /**
- * @brief This API get the stat of the chosen LED if it's on , off or toggle
- * @param id The ID of the led which its state will be gotten
- * @return the state of chosen LED (LED_ON, LED_OFF or LED_TOG)
+ * @brief This API is used to get the state of the LED.
+ * @param id The ID of LED whose state will be got.
+ * @return The state of the LED (LED_OFF, LED_ON or LED_TOG).
  */
-led_state_t led_get_state(led_id_t id)
+led_state_t LED_get_state(led_id_t id)
 {
-    return LEDS[id].led_state;
+    led_state_t state = LED_MAX_STATE;
+    /* Check if the LED exists or not */
+    if(id < LED_MAX_ID)
+    {
+        /* Get the LED state */
+        state = LEDs_CFG[id].state;
+    }
+    else
+    {
+        /* Do Nothing */
+    }
+    return state;
 }
+
 /**
- * @brief This API is responsible for running LED
+ * @brief This API is used to update the LED state and drive MCU output to achieve the LED state.
  */
-void led_update(void)
+void LED_update(void)
 {
-    /* Timing characterstics will be added */
-    led_id_t led ; 
-    for(led = FIRST_LED ; led < LED_MAX; led++)
-        led_control(led, LEDS[led].led_state);
+    uint8_t led = FIRST_LED;
+    /* Loop for LEDs to update their states */
+    for(led = FIRST_LED; led < LED_MAX_ID; led ++)
+    {
+        /* Check if the LED state exists or not */
+        if(LEDs_CFG[led].state < LED_MAX_STATE)
+        {
+            /* Control LED state */
+            LED_control_state(led);
+        }
+        else
+        {
+            /* Do Nothing */
+        }
+    }
 }
