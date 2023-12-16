@@ -19,14 +19,14 @@
 
 /**
  * @brief SSD Definitions
-*/
+ */
 #define FIRST_SSD       0U
 #define LAST_SSD        (((uint8_t)SSD_MAX_ID) - 1U)
-#define SSD_MAX_DIGIT   9U
+#define SSD_MAX_DIGIT   10U
 
 /**
  * @brief Segments shifting
-*/
+ */
 #define SEG_A_SHIFT     0U
 #define SEG_B_SHIFT     1U
 #define SEG_C_SHIFT     2U
@@ -37,17 +37,17 @@
 
 /**
  * @brief Segment Mask
-*/
+ */
 #define SEG_Mask        0x01U
 
 /**
  * @brief SSD clear value.
-*/
+ */
 #define SSD_CLEAR_VALUE   0U
 
 /**
  * @brief Division Factor
-*/
+ */
 #define DIVIDE_BY_10    10U
 
 /**
@@ -69,16 +69,16 @@ extern Ssd_S SSDs_CFG[SSD_MAX_ID];
  */
 static uint8_t SSD_Digits[SSD_MAX_DIGIT] =
 {
-    0x3FU, /* 0 */
-    0x06U, /* 1 */
-    0x5BU, /* 2 */
-    0x4FU, /* 3 */
-    0X66U, /* 4 */
-    0X6DU, /* 5 */
-    0x7DU, /* 6 */
-    0x07U, /* 7 */
-    0x7FU, /* 8 */
-    0x6FU  /* 9 */
+		0x3FU, /* 0 */
+		0x06U, /* 1 */
+		0x5BU, /* 2 */
+		0x4FU, /* 3 */
+		0X66U, /* 4 */
+		0X6DU, /* 5 */
+		0x7DU, /* 6 */
+		0x07U, /* 7 */
+		0x7FU, /* 8 */
+		0x6FU  /* 9 */
 };
 
 /**
@@ -86,26 +86,26 @@ static uint8_t SSD_Digits[SSD_MAX_DIGIT] =
  */
 static uint8_t SSD_Symbols[SSD_MAX_SYMBOL]=
 {
-    0x77U,  /* A */
-    0x7CU,  /* b */
-    0X39U,  /* C */
-    0X5EU,  /* d */
-    0X79U,  /* E */
-    0X71U,  /* F */
-    0X3DU,  /* G */
-    0X76U,  /* H */
-    0X30U,  /* I */
-    0X1FU,  /* J */
-    0X38U,  /* L */
-    0X37U,  /* n */
-    0X3FU,  /* O */
-    0X73U,  /* P */
-    0X67U,  /* q */
-    0X70U,  /* r */
-    0X6DU,  /* S */
-    0X78U,  /* t */
-    0X3EU,  /* U */
-    0X6EU   /* y */
+		0x77U,  /* A */
+		0x7CU,  /* b */
+		0X39U,  /* C */
+		0X5EU,  /* d */
+		0X79U,  /* E */
+		0X71U,  /* F */
+		0X3DU,  /* G */
+		0X76U,  /* H */
+		0X30U,  /* I */
+		0X1FU,  /* J */
+		0X38U,  /* L */
+		0X37U,  /* n */
+		0X3FU,  /* O */
+		0X73U,  /* P */
+		0X67U,  /* q */
+		0X70U,  /* r */
+		0X6DU,  /* S */
+		0X78U,  /* t */
+		0X3EU,  /* U */
+		0X6EU   /* y */
 };
 
 /**
@@ -116,14 +116,14 @@ static uint8_t SSD_Value[SSD_MAX_ID] = {SSD_CLEAR_VALUE};
 
 /**
  * @section Static Function Prototype.
-*/
+ */
 
 static void SSD_control_segments(ssd_id_t);
 
 
 /**
  * @section Static Function Implementation.
-*/
+ */
 
 /**
  * @brief This API is used to control SSD segments and drive them with the right value.
@@ -131,46 +131,46 @@ static void SSD_control_segments(ssd_id_t);
  */
 static void SSD_control_segments(ssd_id_t id)
 {
-    /* Control Segments' levels depending on the symbol */
-    MCAL_GPIO_set_pin_level(SSD_SEGMENT_A_PORT, SSD_SEGMENT_A_PIN, (((SSD_Value[id] >> SEG_A_SHIFT) & SEG_Mask) ^ (SSDs_CFG[id].type)));
-    MCAL_GPIO_set_pin_level(SSD_SEGMENT_B_PORT, SSD_SEGMENT_B_PIN, (((SSD_Value[id] >> SEG_B_SHIFT) & SEG_Mask) ^ (SSDs_CFG[id].type)));
-    MCAL_GPIO_set_pin_level(SSD_SEGMENT_C_PORT, SSD_SEGMENT_C_PIN, (((SSD_Value[id] >> SEG_C_SHIFT) & SEG_Mask) ^ (SSDs_CFG[id].type)));
-    MCAL_GPIO_set_pin_level(SSD_SEGMENT_D_PORT, SSD_SEGMENT_D_PIN, (((SSD_Value[id] >> SEG_D_SHIFT) & SEG_Mask) ^ (SSDs_CFG[id].type)));
-    MCAL_GPIO_set_pin_level(SSD_SEGMENT_E_PORT, SSD_SEGMENT_E_PIN, (((SSD_Value[id] >> SEG_E_SHIFT) & SEG_Mask) ^ (SSDs_CFG[id].type)));
-    MCAL_GPIO_set_pin_level(SSD_SEGMENT_F_PORT, SSD_SEGMENT_F_PIN, (((SSD_Value[id] >> SEG_F_SHIFT) & SEG_Mask) ^ (SSDs_CFG[id].type)));
-    MCAL_GPIO_set_pin_level(SSD_SEGMENT_G_PORT, SSD_SEGMENT_G_PIN, (((SSD_Value[id] >> SEG_G_SHIFT) & SEG_Mask) ^ (SSDs_CFG[id].type)));
+	/* Control Segments' levels depending on the symbol */
+	MCAL_GPIO_set_pin_level(SSD_SEGMENT_A_PORT, SSD_SEGMENT_A_PIN, !(((SSD_Value[id] >> SEG_A_SHIFT) & SEG_Mask) ^ (SSDs_CFG[id].type)));
+	MCAL_GPIO_set_pin_level(SSD_SEGMENT_B_PORT, SSD_SEGMENT_B_PIN, !(((SSD_Value[id] >> SEG_B_SHIFT) & SEG_Mask) ^ (SSDs_CFG[id].type)));
+	MCAL_GPIO_set_pin_level(SSD_SEGMENT_C_PORT, SSD_SEGMENT_C_PIN, !(((SSD_Value[id] >> SEG_C_SHIFT) & SEG_Mask) ^ (SSDs_CFG[id].type)));
+	MCAL_GPIO_set_pin_level(SSD_SEGMENT_D_PORT, SSD_SEGMENT_D_PIN, !(((SSD_Value[id] >> SEG_D_SHIFT) & SEG_Mask) ^ (SSDs_CFG[id].type)));
+	MCAL_GPIO_set_pin_level(SSD_SEGMENT_E_PORT, SSD_SEGMENT_E_PIN, !(((SSD_Value[id] >> SEG_E_SHIFT) & SEG_Mask) ^ (SSDs_CFG[id].type)));
+	MCAL_GPIO_set_pin_level(SSD_SEGMENT_F_PORT, SSD_SEGMENT_F_PIN, !(((SSD_Value[id] >> SEG_F_SHIFT) & SEG_Mask) ^ (SSDs_CFG[id].type)));
+	MCAL_GPIO_set_pin_level(SSD_SEGMENT_G_PORT, SSD_SEGMENT_G_PIN, !(((SSD_Value[id] >> SEG_G_SHIFT) & SEG_Mask) ^ (SSDs_CFG[id].type)));
 }
 
 /**
  * @section Implementation of APIs
-*/
+ */
 
 /**
  * @brief This API is used to Initialize SSD Pins and SSD Segments' Pins as output.
  */
 void SSD_init(void)
 {
-    uint8_t ssd = FIRST_SSD;
+	uint8_t ssd = FIRST_SSD;
 
-    /* Initialize Segements' Pins as output */
-    MCAL_GPIO_set_pin_mode(SSD_SEGMENT_A_PORT, SSD_SEGMENT_A_PIN, MCAL_PIN_OUTPUT);
-    MCAL_GPIO_set_pin_mode(SSD_SEGMENT_B_PORT, SSD_SEGMENT_B_PIN, MCAL_PIN_OUTPUT);
-    MCAL_GPIO_set_pin_mode(SSD_SEGMENT_C_PORT, SSD_SEGMENT_C_PIN, MCAL_PIN_OUTPUT);
-    MCAL_GPIO_set_pin_mode(SSD_SEGMENT_D_PORT, SSD_SEGMENT_D_PIN, MCAL_PIN_OUTPUT);
-    MCAL_GPIO_set_pin_mode(SSD_SEGMENT_E_PORT, SSD_SEGMENT_E_PIN, MCAL_PIN_OUTPUT);
-    MCAL_GPIO_set_pin_mode(SSD_SEGMENT_F_PORT, SSD_SEGMENT_F_PIN, MCAL_PIN_OUTPUT);
-    MCAL_GPIO_set_pin_mode(SSD_SEGMENT_G_PORT, SSD_SEGMENT_G_PIN, MCAL_PIN_OUTPUT);
+	/* Initialize Segments' Pins as output */
+	MCAL_GPIO_set_pin_mode(SSD_SEGMENT_A_PORT, SSD_SEGMENT_A_PIN, MCAL_PIN_OUTPUT);
+	MCAL_GPIO_set_pin_mode(SSD_SEGMENT_B_PORT, SSD_SEGMENT_B_PIN, MCAL_PIN_OUTPUT);
+	MCAL_GPIO_set_pin_mode(SSD_SEGMENT_C_PORT, SSD_SEGMENT_C_PIN, MCAL_PIN_OUTPUT);
+	MCAL_GPIO_set_pin_mode(SSD_SEGMENT_D_PORT, SSD_SEGMENT_D_PIN, MCAL_PIN_OUTPUT);
+	MCAL_GPIO_set_pin_mode(SSD_SEGMENT_E_PORT, SSD_SEGMENT_E_PIN, MCAL_PIN_OUTPUT);
+	MCAL_GPIO_set_pin_mode(SSD_SEGMENT_F_PORT, SSD_SEGMENT_F_PIN, MCAL_PIN_OUTPUT);
+	MCAL_GPIO_set_pin_mode(SSD_SEGMENT_G_PORT, SSD_SEGMENT_G_PIN, MCAL_PIN_OUTPUT);
 
-    /* Initialize SSD Pins as output and initialize their states */
-    for(ssd = FIRST_SSD; ssd < SSD_MAX_ID; ssd++)
-    {
-        /* Set SSD Pins as output */
-        MCAL_GPIO_set_pin_mode((SSDs_CFG[ssd].port), (SSDs_CFG[ssd].pin), MCAL_PIN_OUTPUT);
-        /* Control Segments By initial Value */
-        SSD_control_segments(ssd);
-        /* Set SSD level */
-        MCAL_GPIO_set_pin_level((SSDs_CFG[ssd].port), (SSDs_CFG[ssd].pin), ((SSDs_CFG[ssd].type) ^ (SSDs_CFG[ssd].state)));
-    }
+	/* Initialize SSD Pins as output and initialize their states */
+	for(ssd = FIRST_SSD; ssd < SSD_MAX_ID; ssd++)
+	{
+		/* Set SSD Pins as output */
+		MCAL_GPIO_set_pin_mode((SSDs_CFG[ssd].port), (SSDs_CFG[ssd].pin), MCAL_PIN_OUTPUT);
+		/* Control Segments By initial Value */
+		SSD_control_segments(ssd);
+		/* Set SSD level */
+		MCAL_GPIO_set_pin_level((SSDs_CFG[ssd].port), (SSDs_CFG[ssd].pin), ((SSDs_CFG[ssd].type) ^ (SSDs_CFG[ssd].state)));
+	}
 }
 
 /**
@@ -180,16 +180,16 @@ void SSD_init(void)
  */
 void SSD_set_symbol(ssd_id_t id, ssd_symbol_t symbol)
 {
-    /* Check if the SSD and Symbol exist or not */
-    if((id < SSD_MAX_ID) && (symbol < SSD_MAX_SYMBOL))
-    {
-        /* Set the given symbol to its SSD */
-        SSD_Value[id] = SSD_Symbols[symbol];
-    }
-    else
-    {
-        /* Do Nothing */
-    }
+	/* Check if the SSD and Symbol exist or not */
+	if((id < SSD_MAX_ID) && (symbol < SSD_MAX_SYMBOL))
+	{
+		/* Set the given symbol to its SSD */
+		SSD_Value[id] = SSD_Symbols[symbol];
+	}
+	else
+	{
+		/* Do Nothing */
+	}
 }
 
 /**
@@ -199,20 +199,25 @@ void SSD_set_symbol(ssd_id_t id, ssd_symbol_t symbol)
  */
 void SSD_set_number(ssd_id_t ones_id, uint16_t number)
 {
-    /* Check if SSD exists or not */
-    if(ones_id < SSD_MAX_ID)
-    {
-        do
-        {
-            /* Set Digit to  its SSD */
-            SSD_Value[ones_id++] = SSD_Digits[(number % DIVIDE_BY_10)];
-        
-        } while ((number / DIVIDE_BY_10 != SSD_CLEAR_VALUE) && (ones_id < SSD_MAX_ID));
-    }
-    else
-    {
-        /* Do Nothing */
-    }      
+	/* Check if SSD exists or not */
+	while(ones_id < SSD_MAX_ID)
+	{
+		/* Set Digit to  its SSD */
+		SSD_Value[ones_id++] = SSD_Digits[(number % DIVIDE_BY_10)];
+		/* Update number to get the next digit */
+		number /= DIVIDE_BY_10;
+
+		/* check if the number ends or not */
+		if(number == SSD_CLEAR_VALUE)
+		{
+			/* Get out of loop */
+			break;
+		}
+		else
+		{
+			/* Do Nothing */
+		}
+	}
 }
 
 /**
@@ -221,16 +226,16 @@ void SSD_set_number(ssd_id_t ones_id, uint16_t number)
  */
 void SSD_clear(ssd_id_t id)
 {
-    /* Check if the SSD exists or not */
-    if(id < SSD_MAX_ID)
-    {
-        /* Set the clear value to the given SSD */
-        SSD_Value[id] = SSD_CLEAR_VALUE;
-    }
-    else
-    {
-        /* Do Nothing */
-    }
+	/* Check if the SSD exists or not */
+	if(id < SSD_MAX_ID)
+	{
+		/* Set the clear value to the given SSD */
+		SSD_Value[id] = SSD_CLEAR_VALUE;
+	}
+	else
+	{
+		/* Do Nothing */
+	}
 }
 
 /**
@@ -240,16 +245,16 @@ void SSD_clear(ssd_id_t id)
  */
 void SSD_set_state(ssd_id_t id, ssd_state_t state)
 {
-    /* Check if the SSD and state exist or not */
-    if((id < SSD_MAX_ID) && (state < SSD_MAX_STATE))
-    {
-        /* Set the state of the given SSD */
-        SSDs_CFG[id].state = state;
-    }
-    else
-    {
-        /* Do Nothing */
-    }
+	/* Check if the SSD and state exist or not */
+	if((id < SSD_MAX_ID) && (state < SSD_MAX_STATE))
+	{
+		/* Set the state of the given SSD */
+		SSDs_CFG[id].state = state;
+	}
+	else
+	{
+		/* Do Nothing */
+	}
 }
 
 /**
@@ -259,19 +264,19 @@ void SSD_set_state(ssd_id_t id, ssd_state_t state)
  */
 ssd_state_t SSD_get_state(ssd_id_t id)
 {
-    ssd_state_t state = SSD_MAX_STATE;
+	ssd_state_t state = SSD_MAX_STATE;
 
-    if(id < SSD_MAX_ID)
-    {
-        /* Get the state of the given SSD */
-        state = (SSDs_CFG[id].state);
-    }
-    else
-    {
-        /* Do Nothing */
-    }
+	if(id < SSD_MAX_ID)
+	{
+		/* Get the state of the given SSD */
+		state = (SSDs_CFG[id].state);
+	}
+	else
+	{
+		/* Do Nothing */
+	}
 
-    return state;    
+	return state;
 }
 
 /**
@@ -279,30 +284,30 @@ ssd_state_t SSD_get_state(ssd_id_t id)
  */
 void SSD_update(void)
 {
-    static uint8_t current_ssd = FIRST_SSD;
-    uint8_t ssd = FIRST_SSD;
-    
-    /* Turn All SSDs off */
-    for(ssd = FIRST_SSD; ssd < SSD_MAX_ID; ssd ++)
-    {
-        MCAL_GPIO_set_pin_level((SSDs_CFG[ssd].port), (SSDs_CFG[ssd].pin), ((SSDs_CFG[ssd].type) ^ SSD_OFF));
-    }
-    
-    /* Turn current SSD ON */
-    MCAL_GPIO_set_pin_level((SSDs_CFG[current_ssd].port), (SSDs_CFG[current_ssd].pin), ((SSDs_CFG[current_ssd].type) ^ SSD_ON));
+	static uint8_t current_ssd = FIRST_SSD;
+	uint8_t ssd = FIRST_SSD;
 
-    /* Control SSD segments */
-    SSD_control_segments(current_ssd);
+	/* Turn All SSDs off */
+	for(ssd = FIRST_SSD; ssd < SSD_MAX_ID; ssd ++)
+	{
+		MCAL_GPIO_set_pin_level((SSDs_CFG[ssd].port), (SSDs_CFG[ssd].pin), ((SSDs_CFG[ssd].type) ^ SSD_OFF));
+	}
 
-    /* Update current SSD  */
-    if(LAST_SSD == current_ssd)
-    {
-        /* Set current SSD to first SSD */
-        current_ssd = FIRST_SSD;
-    }
-    else
-    {
-        /* Set current SSD to next SSD */
-        current_ssd ++;
-    }
+	/* Control SSD segments */
+	SSD_control_segments(current_ssd);
+
+	/* Turn current SSD ON */
+	MCAL_GPIO_set_pin_level((SSDs_CFG[current_ssd].port), (SSDs_CFG[current_ssd].pin), ((SSDs_CFG[current_ssd].type) ^ SSD_ON));
+
+	/* Update current SSD  */
+	if(LAST_SSD == current_ssd)
+	{
+		/* Set current SSD to first SSD */
+		current_ssd = FIRST_SSD;
+	}
+	else
+	{
+		/* Set current SSD to next SSD */
+		current_ssd ++;
+	}
 }

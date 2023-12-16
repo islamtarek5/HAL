@@ -1,8 +1,8 @@
 /*****************************************************************************
- * @Author                : Islam Tarek<islam.tarek@valeo.com>               *
+ * @Author                : Islam Tarek<islamtarek0550@gmail.com>            *
  * @CreatedDate           : 2023-09-03 13:30:19                              *
- * @LastEditors           : Islam Tarek<islam.tarek@valeo.com>               *
- * @LastEditDate          : 2023-09-03 15:57:11                              *
+ * @LastEditors           : Islam Tarek<islamtarek0550@gmail.com>            *
+ * @LastEditDate          : 2023-12-16 19:43:58                              *
  * @FilePath              : SSD.h                                            *
  ****************************************************************************/
 
@@ -13,7 +13,7 @@
  * @section Includes
  */
 
-#include "../MCAL/MCAL.h"
+#include "../../MCAL/MCAL.h"
 #include "SSD_cfg.h"
 
 
@@ -77,8 +77,8 @@ typedef enum
  */
 typedef enum
 {
-    SSD_CATHODE = (uint8_t)0,
-    SSD_ANODE               ,
+    SSD_ANODE = (uint8_t)0,
+	SSD_CATHODE           ,
     SSD_MAX_TYPE
 }ssd_type_t;
 
