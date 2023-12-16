@@ -15,13 +15,13 @@
 
 /**
  * @brief LED ID
- * @note This Enum will contain the LEDs' IDs in project.
- * !note LED_Max_ID must not deleted as it's used in code.
+ * @note This enum will contain the LEDs' IDs in project.
+ * !note LED_MAX_ID must not deleted as it's used in code.
  */
 typedef enum
 {
-    // TODO: Add LEDs' IDs
-    LED_MAX_ID
+	// TODO: Add LEDs' IDs
+	LED_MAX_ID
 }led_id_t;
 
 #endif

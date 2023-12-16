@@ -19,11 +19,12 @@
 
 /**
  * @brief LED Configuration Array
- * @note This Array will contain the leds configurations
+ * @note This Array will contain the LEDs'configurations
+ * @note The LED structure is {LED_ID, LED_PORT, LED_PIN, LED_BIAS, LED_INITIAL_STATE}
  */
 
 Led_S LEDs_CFG[LED_MAX_ID] =
 {
-    // TODO: ADD LEDs' Configurations
+		// TODO: ADD LEDs' Configurations
 
 };
