@@ -1,8 +1,8 @@
 /*****************************************************************************
- * @Author                : Islam Tarek<islam.tarek@valeo.com>               *
+ * @Author                : Islam Tarek<islamtarek0550@gmail.com>            *
  * @CreatedDate           : 2023-08-28 15:06:37                              *
- * @LastEditors           : Islam Tarek<islam.tarek@valeo.com>               *
- * @LastEditDate          : 2023-08-29 11:54:06                              *
+ * @LastEditors           : Islam Tarek<islamtarek0550@gmail.com>            *
+ * @LastEditDate          : 2023-12-16 16:53:01                              *
  * @FilePath              : led.c                                            *
  ****************************************************************************/
 
@@ -18,6 +18,8 @@
  */
 
 #define FIRST_LED   0U
+#define LED_STATE_IS_NOT_INITIAL 0U
+#define LED_STATE_IS_INITIAL     1U
 
 /**
  * @section External Global Variables
@@ -25,6 +27,14 @@
 
 extern Led_S LEDs_CFG[LED_MAX_ID];
 
+/**
+ * @section Static Global Variables
+*/
+
+/**
+ * @brief This Variable is used to indicate the initial state.
+*/
+static uint8_t LED_INITIAL_STATE_FLAG = LED_STATE_IS_NOT_INITIAL;
 
 /**
  * @section Static function prototype.
@@ -39,13 +49,25 @@ static void LED_control_state(led_id_t);
 
 /**
  * @brief This API is used to control LED state and drive MCU Pin with suitable output to achieve required state.
- * @param id The ID of th led whose state will be controlled.
+ * @param id The ID of the led whose state will be controlled.
  */
 static void LED_control_state(led_id_t id)
 {
     /* Check if the LED state is toggle or not */
     if(LEDs_CFG[id].state == LED_TOG)
     {
+        if(LED_INITIAL_STATE_FLAG == LED_STATE_IS_INITIAL)
+        {
+            /* Update GPIO Pin level to OFF state */
+            (void)MCAL_GPIO_set_pin_level(LEDs_CFG[id].port, LEDs_CFG[id].pin, (LEDs_CFG[id].bias ^ MCAL_PIN_LOW));
+            /* Reset LED Initial State flag */
+            LED_INITIAL_STATE_FLAG = LED_STATE_IS_NOT_INITIAL;
+            
+        }
+        else
+        {
+            /* Do Nothing */
+        }
         /* Toggle LED state */
         (void)MCAL_GPIO_toggle_pin_level(LEDs_CFG[id].port, LEDs_CFG[id].pin);
     }
@@ -69,8 +91,19 @@ void LED_init(void)
         /* Initialize LEDs Pins as output */
         (void)MCAL_GPIO_set_pin_mode(LEDs_CFG[led].port, LEDs_CFG[led].pin, MCAL_PIN_OUTPUT);
         /* Check if the state exists or not and that initial state isn't toggle */
-        if((LEDs_CFG[led].state < LED_MAX_STATE) && (LEDs_CFG[led].state != LED_TOG))
+        if(LEDs_CFG[led].state < LED_MAX_STATE)
         {
+            /* Check the LED state */
+            if(LEDs_CFG[led].state == LED_TOG)
+            {
+                /* Set LED Initial state flag */
+                LED_INITIAL_STATE_FLAG = LED_STATE_IS_INITIAL;
+            }
+            else
+            {
+                /* Do Nothing */
+            }
+            /* Control LED State */
             LED_control_state(led);   
         }
         else
